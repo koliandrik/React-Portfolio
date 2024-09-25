@@ -2,7 +2,12 @@
   "name": "react-portfolio",
   "version": "1.0.0",
   "description": "Portfolio Made with React",
-  "main": "index.js",
+  "main": "server/server.js",
+  "scripts": {
+    "install": "npm install",
+    "start": "npm start",
+    "build": "npm run build",
+
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
