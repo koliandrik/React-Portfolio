@@ -14,7 +14,8 @@ const assignmentSchema = new Schema({
         trim: true
     },
     image: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Image'
     },
     link: {
         type: String

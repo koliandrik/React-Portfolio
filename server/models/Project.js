@@ -11,9 +11,6 @@ const projectSchema = new Schema({
     description: {
         type: String
     },
-    image: {
-        type: String
-    },
     link: {
         type: String
     },
@@ -22,6 +19,10 @@ const projectSchema = new Schema({
     },
     technologies: {
         type: String
+    },
+    image: {
+        type: Schema.Types.ObjectId,
+        ref: 'Image'
     },
     teammates: {
         type: Schema.Types.ObjectId,
