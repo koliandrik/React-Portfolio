@@ -36,9 +36,9 @@ function Nav() {
                             <FiChevronsLeft />
                         </Button>
                     </DrawerTrigger>
-                    <DrawerContent>
-                        <DrawerHeader>
-                            <DrawerTitle>Menu</DrawerTitle>
+                    <DrawerContent display="flex" flexDirection="column" gap="4" align="center" justify="center">
+                        <DrawerHeader justifyItems={'center'} borderBottomWidth="1px"> 
+                            <DrawerTitle display={'flex'} justify={'center'}>Menu</DrawerTitle>
                             <DrawerCloseTrigger asChild>
                             </DrawerCloseTrigger>
                         </DrawerHeader>
@@ -47,7 +47,7 @@ function Nav() {
 
                             <For each = {[ 'Home', 'About', 'Portfolio', 'Contact']}>
                                 {(item) => (
-                                    <MenuItem key={item} as={Link} href={`/${item.toLowerCase()}`}>{item}</MenuItem>
+                                    <MenuItem justifyContent={'center'} key={item} as={Link} href={`/${item.toLowerCase()}`}>{item}</MenuItem>
                                 )}
                             </For>
 

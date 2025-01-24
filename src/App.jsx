@@ -4,9 +4,7 @@ import { Outlet} from 'react-router-dom'
 import Nav from './components/Nav'
 import { Provider } from '@/components/ui/provider'
 import { Container, Stack } from '@chakra-ui/react'
-
-
-
+import ShaderBackground from './components/ShaderBackground'
 
 
 
@@ -14,12 +12,13 @@ function App() {
 
   return (
     <>
+    <ShaderBackground />
       <Provider>
         
           <Nav />
-            <Stack spacing={4}>
+            <Container maxW="container.xl" mt={10}>
               <Outlet />
-            </Stack>
+            </Container>
 
       </Provider>
     </>
