@@ -1,7 +1,7 @@
 
-import { Box, Link, Flex, Container, Button, ButtonGroup, Stack, MenuItem, For, Menu } from '@chakra-ui/react';
+import { Box, Link, Flex, Container, Button, MenuItem, For,  } from '@chakra-ui/react';
 
-import { FiChevronsLeft, FiChevronsRight, FiMenu, FiX } from 'react-icons/fi';
+import { FiChevronsLeft,  } from 'react-icons/fi';
 
 import { 
     MenuContent,

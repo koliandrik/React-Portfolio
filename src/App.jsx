@@ -12,15 +12,13 @@ function App() {
 
   return (
     <>
-    <ShaderBackground />
-      <Provider>
-        
-          <Nav />
-            <Container maxW="container.xl" mt={10}>
-              <Outlet />
-            </Container>
-
-      </Provider>
+      <ShaderBackground />
+        <Provider>
+            <Nav />
+              <Container maxW="container.xl" mt={10}>
+                <Outlet />
+              </Container>
+        </Provider>
     </>
   )
 }
