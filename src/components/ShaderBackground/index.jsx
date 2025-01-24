@@ -8,19 +8,11 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+  precision mediump float;
+
   #define S(x, y, z) smoothstep(x, y, z)
   #define B(a, b, edge, t) S(a-edge, a+edge, t)*S(b+edge, b-edge, t)
   #define sat(x) clamp(x,0.,1.)
-
-  #define streetLightCol vec3(1., .7, .3)
-  #define headLightCol vec3(.8, .8, 1.)
-  #define tailLightCol vec3(1., .1, .1)
-
-  #define HIGH_QUALITY
-  #define CAM_SHAKE 1.
-  #define LANE_BIAS .5
-  #define RAIN
-  //#define DROP_DEBUG
 
   uniform float iTime;
   uniform vec2 iResolution;
@@ -56,9 +48,6 @@ const fragmentShader = `
   float BokehMask(vec3 ro, vec3 rd, vec3 p, float size, float blur) {
     float d = DistLine(ro, rd, p);
     float m = S(size, size*(1.-blur), d);
-    #ifdef HIGH_QUALITY
-    m *= mix(.7, 1., S(.8*size, size, d));
-    #endif
     return m;
   }
 
@@ -73,9 +62,7 @@ const fragmentShader = `
   vec2 GetDrops(vec2 uv, float seed, float m) {
     float t = iTime+m*30.;
     vec2 o = vec2(0.);
-    #ifndef DROP_DEBUG
     uv.y += t*.05;
-    #endif
     uv *= vec2(10., 2.5)*2.;
     vec2 id = floor(uv);
     vec3 n = N31(id.x + (id.y+seed)*546.3524);
@@ -89,11 +76,9 @@ const fragmentShader = `
     float ts = 1.5;
     vec2 trailPos = vec2(bd.x*ts, (fract(bd.y*ts*2.-t*2.)-.5)*.5);
     bd.y += slide*2.;
-    #ifdef HIGH_QUALITY
     float dropShape = bd.x*bd.x;
     dropShape *= DeltaSawTooth(t);
     bd.y += dropShape;
-    #endif
     float d = length(bd);
     float trailMask = S(-.2, .2, bd.y);
     trailMask *= bd.y;
@@ -102,9 +87,6 @@ const fragmentShader = `
     float dropTrail = S(.1, .02, td);
     dropTrail *= trailMask;
     o = mix(bd*mainDrop, trailPos, dropTrail);
-    #ifdef DROP_DEBUG
-    if(uv2.x<.02 || uv2.y<.01) o = vec2(1.);
-    #endif
     return o;
   }
 
@@ -115,30 +97,20 @@ const fragmentShader = `
     vec3 u = cross(f, r);
     float t = iTime;
     vec2 offs = vec2(0.);
-    #ifdef RAIN
     vec2 dropUv = uv;
-    #ifdef HIGH_QUALITY
     float x = (sin(t*.1)*.5+.5)*.5;
     x = -x*x;
     float s = sin(x);
     float c = cos(x);
     mat2 rot = mat2(c, -s, s, c);
-    #ifndef DROP_DEBUG
     dropUv = uv*rot;
     dropUv.x += -sin(t*.1)*.5;
-    #endif
-    #endif
     offs = GetDrops(dropUv, 1., 0.0);
-    #ifndef DROP_DEBUG
     offs += GetDrops(dropUv*1.4, 10., 0.0);
-    #ifdef HIGH_QUALITY
     offs += GetDrops(dropUv*2.4, 25., 0.0);
-    #endif
     float ripple = sin(t+uv.y*3.1415*30.+uv.x*124.)*.5+.5;
     ripple *= .005;
     offs += vec2(ripple*ripple, ripple);
-    #endif
-    #endif
     vec3 center = ro + f*zoom;
     vec3 i = center + (uv.x-offs.x)*r + (uv.y-offs.y)*u;
     rd = normalize(i-ro);
@@ -153,10 +125,6 @@ const fragmentShader = `
     float blur = .1;
     m += BokehMask(ro, rd, p-vec3(.08, 0., 0.), size, blur);
     m += BokehMask(ro, rd, p+vec3(.08, 0., 0.), size, blur);
-    #ifdef HIGH_QUALITY
-    m += BokehMask(ro, rd, p+vec3(.1, 0., 0.), size, blur);
-    m += BokehMask(ro, rd, p-vec3(.1, 0., 0.), size, blur);
-    #endif
     float distFade = max(.01, pow(1.-z, 9.));
     blur = .8;
     size *= 2.5;
@@ -164,14 +132,14 @@ const fragmentShader = `
     r += BokehMask(ro, rd, p+vec3(-.09, -.2, 0.), size, blur);
     r += BokehMask(ro, rd, p+vec3(.09, -.2, 0.), size, blur);
     r *= distFade*distFade;
-    return headLightCol*(m+r)*distFade;
+    return vec3(.8, .8, 1.)*(m+r)*distFade;
   }
 
   vec3 TailLights(float i, float t) {
     t = t*1.5+i;
     float id = floor(t)+i;
     vec3 n = N31(id);
-    float laneId = S(LANE_BIAS, LANE_BIAS+.01, n.y);
+    float laneId = S(.5, .51, n.y);
     float ft = fract(t);
     float z = 3.-ft*3.;
     laneId *= S(.2, 1.5, z);
@@ -182,17 +150,15 @@ const fragmentShader = `
     float blur = .1;
     float m = BokehMask(ro, rd, p-vec3(.08, 0., 0.), size, blur) +
               BokehMask(ro, rd, p+vec3(.08, 0., 0.), size, blur);
-    #ifdef HIGH_QUALITY
     float bs = n.z*3.;
     float brake = S(bs, bs+.01, z);
     brake *= S(bs+.01, bs, z-.5*n.y);
     m += (BokehMask(ro, rd, p+vec3(.1, 0., 0.), size, blur) +
           BokehMask(ro, rd, p-vec3(.1, 0., 0.), size, blur))*brake;
-    #endif
     float refSize = size*2.5;
     m += BokehMask(ro, rd, p+vec3(-.09, -.2, 0.), refSize, .8);
     m += BokehMask(ro, rd, p+vec3(.09, -.2, 0.), refSize, .8);
-    vec3 col = tailLightCol*m*ft;
+    vec3 col = vec3(1., .1, .1)*m*ft;
     float b = BokehMask(ro, rd, p+vec3(.12, 0., 0.), size, blur);
     b += BokehMask(ro, rd, p+vec3(.12, -.2, 0.), refSize, .8)*.2;
     vec3 blinker = vec3(1., .7, .2);
@@ -214,7 +180,7 @@ const fragmentShader = `
     float distFade = Remap(1., .7, .1, 1.5, 1.-pow(1.-z,6.));
     distFade *= (1.-z);
     float m = BokehMask(ro, rd, p, .05*d, blur)*distFade;
-    return m*streetLightCol;
+    return m*vec3(1., .7, .3);
   }
 
   vec3 EnvironmentLights(float i, float t) {
@@ -232,7 +198,7 @@ const fragmentShader = `
     m *= distFade*distFade*.5;
     m *= 1.-pow(sin(z*6.28*20.*n)*.5+.5, 20.);
     vec3 randomCol = vec3(fract(n*-34.5), fract(n*4572.), fract(n*1264.));
-    vec3 col = mix(tailLightCol, streetLightCol, fract(n*-65.42));
+    vec3 col = mix(vec3(1., .1, .1), vec3(1., .7, .3), fract(n*-65.42));
     col = mix(col, randomCol, n);
     return m*col*.2;
   }
@@ -248,7 +214,7 @@ const fragmentShader = `
     float h1 = N(floor(bt));
     float h2 = N(floor(bt+1.));
     float bumps = mix(h1, h2, fract(bt))*.1;
-    bumps = bumps*bumps*bumps*CAM_SHAKE;
+    bumps = bumps*bumps*bumps;
     pos.y += bumps;
     float lookatY = pos.y+bumps;
     vec3 lookat = vec3(0.3, lookatY, 1.);
