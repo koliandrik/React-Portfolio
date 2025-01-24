@@ -24,7 +24,6 @@ const fragmentShader = `
 
   uniform float iTime;
   uniform vec2 iResolution;
-  uniform vec2 iMouse;
 
   vec3 ro, rd;
 
@@ -109,7 +108,7 @@ const fragmentShader = `
     return o;
   }
 
-  void CameraSetup(vec2 uv, vec3 pos, vec3 lookat, float zoom, float m) {
+  void CameraSetup(vec2 uv, vec3 pos, vec3 lookat, float zoom) {
     ro = pos;
     vec3 f = normalize(lookat-ro);
     vec3 r = cross(vec3(0., 1., 0.), f);
@@ -129,11 +128,11 @@ const fragmentShader = `
     dropUv.x += -sin(t*.1)*.5;
     #endif
     #endif
-    offs = GetDrops(dropUv, 1., m);
+    offs = GetDrops(dropUv, 1., 0.0);
     #ifndef DROP_DEBUG
-    offs += GetDrops(dropUv*1.4, 10., m);
+    offs += GetDrops(dropUv*1.4, 10., 0.0);
     #ifdef HIGH_QUALITY
-    offs += GetDrops(dropUv*2.4, 25., m);
+    offs += GetDrops(dropUv*2.4, 25., 0.0);
     #endif
     float ripple = sin(t+uv.y*3.1415*30.+uv.x*124.)*.5+.5;
     ripple *= .005;
@@ -244,7 +243,6 @@ const fragmentShader = `
     vec2 uv = fragCoord.xy / iResolution.xy;
     uv -= .5;
     uv.x *= iResolution.x/iResolution.y;
-    vec2 mouse = iMouse.xy/iResolution.xy;
     vec3 pos = vec3(.3, .15, 0.);
     float bt = t * 5.;
     float h1 = N(floor(bt));
@@ -257,9 +255,8 @@ const fragmentShader = `
     vec3 lookat2 = vec3(0., lookatY, .7);
     lookat = mix(lookat, lookat2, sin(t*.1)*.5+.5);
     uv.y += bumps*4.;
-    CameraSetup(uv, pos, lookat, 2., mouse.x);
+    CameraSetup(uv, pos, lookat, 2.);
     t *= .03;
-    t += mouse.x;
     float stp = 1./8.;
     for(float i=0.; i<1.; i+=stp) {
       col += StreetLights(i, t);
@@ -301,7 +298,6 @@ const ShaderBackground = () => {
       uniforms: {
         iTime: { value: 0.0 },
         iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        iMouse: { value: new THREE.Vector2() },
       },
     });
 
@@ -310,21 +306,21 @@ const ShaderBackground = () => {
 
     const animate = () => {
       requestAnimationFrame(animate);
-      material.uniforms.iTime.value += 0.05;
+      material.uniforms.iTime.value += 0.01; // Adjust this value to slow down the animation
       renderer.render(scene, camera);
     };
 
     animate();
 
-    const handleMouseMove = (event) => {
-      material.uniforms.iMouse.value.x = event.clientX;
-      material.uniforms.iMouse.value.y = window.innerHeight - event.clientY;
+    const handleResize = () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
       mountRef.current.removeChild(renderer.domElement);
     };
   }, []);
