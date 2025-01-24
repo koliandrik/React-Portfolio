@@ -1,11 +1,11 @@
 
-import { Box, Link, Flex, Container, Button, } from '@chakra-ui/react';
+import { Box, Link, Flex, Container, Button, ButtonGroup, Stack, MenuItem, For, Menu } from '@chakra-ui/react';
 
 import { FiChevronsLeft, FiChevronsRight, FiMenu, FiX } from 'react-icons/fi';
 
 import { 
     MenuContent,
-    MenuItem,
+ 
     MenuRoot,
     MenuTrigger,
 } from '@chakra-ui/react';
@@ -38,30 +38,35 @@ function Nav() {
                     </DrawerTrigger>
                     <DrawerContent>
                         <DrawerHeader>
-                        <DrawerTitle>Drawer Title</DrawerTitle>
+                            <DrawerTitle>Menu</DrawerTitle>
+                            <DrawerCloseTrigger asChild>
+                            </DrawerCloseTrigger>
                         </DrawerHeader>
-                        <DrawerBody>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
+                        <DrawerBody display="flex" flexDirection="column" gap="4" align="center" justify="center">
+                            <MenuRoot>
+
+                            <For each = {[ 'Home', 'About', 'Portfolio', 'Contact']}>
+                                {(item) => (
+                                    <MenuItem key={item} as={Link} href={`/${item.toLowerCase()}`}>{item}</MenuItem>
+                                )}
+                            </For>
+
+                            </MenuRoot>
+
+
+
                         </DrawerBody>
-                        <DrawerFooter>
-                        <DrawerActionTrigger asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DrawerActionTrigger>
-                        <Button>Save</Button>
-                        </DrawerFooter>
                         <DrawerCloseTrigger />
                     </DrawerContent>
                 </DrawerRoot>
 
                 <Box hideBelow='md' as="nav" display="flex" gap="4" align="center" justify="center"> 
-
-                    <Link href='/'>Home</Link>
-                    <Link href='/about'>About</Link>
-                    <Link href='/portfolio'>Projects</Link>
-                    <Link href='/contact'>Contact</Link>
+                    
+                    <For each = {[ 'Home', 'About', 'Portfolio', 'Contact']}>
+                        {(item) => (
+                            <Link key={item} href={`/${item.toLowerCase()}`}>{item}</Link>
+                        )}
+                    </For>
 
                 </Box>
                 </Container>
