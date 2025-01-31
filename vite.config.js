@@ -4,6 +4,7 @@ import jsconfigPaths from 'vite-jsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/React-Portfolio/',
   plugins: [react(), jsconfigPaths()],
   server: {
     watch: {
