@@ -22,7 +22,7 @@ function Nav() {
     return (
         <Flex gap="4" justify="space-between" align="center" p="4" color="white" >
             <Container display={'flex'} justifyContent={'space-between'} alignItems={'center'} maxW={'container.xl'}> 
-                <Box as="h1" fontSize="xl">Mykola Nastyn</Box>
+                <Box as="h1" fontSize="3xl">Mykola Nastyn</Box>
                 
                 <DrawerRoot>
                     <DrawerBackdrop />

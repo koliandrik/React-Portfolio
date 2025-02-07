@@ -6,7 +6,7 @@ const About = () => {
    <Box as='section' p="4" justifyContent={'center'} alignItems={'center'} display={'flex'} flexDirection={'column'}>
             <Stack spacing={4} direction='column'  align="center" mt={4}>
                 <Heading size={"3xl"}>About Me</Heading>
-                <Text>
+                <Text fontSize={'xl'}>
                     I am a driven and skilled Web Developer with 2
                 years of hands-on coding experience in
                 JavaScript, React, Node.js, and general fullstack development. Blending a background in
