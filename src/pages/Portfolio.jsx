@@ -38,9 +38,9 @@ const Portfolio = () => {
                 
                 <Card.Root width={'320px'} bg="purple.700/70" shadow="md" rounded="md">
                     <Card.Body gap={4} p={4} display="flex" flexDirection="column" align="center" justify="center"> 
-                        <Card.Title >Project 1</Card.Title>
+                        <Card.Title >Back Alley</Card.Title>
                         <Card.Description color= {'white'}>A satirical application which parodies a dark net website used for selling human organs and exotic animals.
-                        Written using React and utilizing Materialize</Card.Description>
+                        Written using React and utilizing Materialize (if not loading wait a few seconds)</Card.Description>
                         <Card.Footer justifyContent={'center'} align={'center'} display={'flex'} gap={2} p={2}>
                             <Link p={1}bg = 'purple.700' rounded='md' href="https://github.com/koliandrik/Back-Alley" >Github Repo</Link >
                             <Link p={1}bg = 'purple.700' rounded='md' href="https://back-alley-28lp.onrender.com/" >Live Demo</Link >
