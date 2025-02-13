@@ -5,7 +5,7 @@ const About = () => {
     return (
    <Box as='section' color={'white'}>
             <Stack spacing={4} direction='column'  align="center" mt={4} >
-                <Heading size={"3xl"} bg="purple.500/70" p={2} rounded='md'>About Me</Heading> 
+                <Heading size={"3xl"} p={2} rounded='md'>About Me</Heading> 
                 <Text fontSize={'xl'} bg="purple.500/70" p={2} rounded='md' >
                     I am a driven and skilled Web Developer with 2
                 years of hands-on coding experience in

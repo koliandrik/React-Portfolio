@@ -30,7 +30,7 @@ const Portfolio = () => {
                     <Card.Body gap={2} color={'white'} p={4} display="flex" flexDirection="column" align="center" justify="center" bg="purple.700/70" rounded="md"> 
                         <Card.Title fontSize={'xl'} bg="purple.500/70" p={2} rounded='md'>Meme Site</Card.Title>
                         <Card.Description fontSize={'xl'} color={'white'} bg="purple.500/70" p={2} rounded='md'>A simple forum/social media-like application which can be used to share images between friends, along with
-                        the functionality to leave comments on other people’s posts. (Requires registration, also currently broken)</Card.Description>
+                        the functionality to leave comments on other people’s posts. (Requires registration, allow a second to spin up if faced with error 503)</Card.Description>
                         <Card.Footer justifyContent={'center'} align={'center'} display={'flex'} gap={2} p={2} bg="purple.500/70" rounded='md'>
                             <Link p={1} color= {'white'} bg = 'purple.700' rounded='md' href="https://github.com/koliandrik/Meme-Site" ><FiGithub /> Github Repo</Link >
                             <Link p={1} color= {'white'} bg = 'purple.700' rounded='md' href="https://meme-site-x66j.onrender.com/" ><FiPlay /> Live Demo</Link >
