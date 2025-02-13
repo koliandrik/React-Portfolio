@@ -1,7 +1,7 @@
 
 import { Box, Link, Flex, Container, Button, MenuItem, For  } from '@chakra-ui/react';
 
-import { FiChevronsLeft,  } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
 
 import {  
     MenuRoot,
@@ -27,8 +27,8 @@ function Nav() {
                 <DrawerRoot>
                     <DrawerBackdrop />
                     <DrawerTrigger asChild>
-                        <Button hideFrom='md' variant="outline" size="sm">
-                            <FiChevronsLeft />
+                        <Button hideFrom='md' variant="outline" size="sm" color={'white'}>
+                            <FiMenu />
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent display="flex" flexDirection="column" gap="4" align="center" justify="center">
@@ -56,7 +56,7 @@ function Nav() {
                 <Box hideBelow='md' as="nav" display="flex" gap="4" align="center" justify="center"> 
                     <For each={['Home', 'About', 'Portfolio', 'Contact']}>
                         {(item) => (
-                            <Link key={item} href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}>{item}</Link>
+                            <Link color={'white'} key={item} href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}>{item}</Link>
                         )}
                     </For>
                 </Box>
