@@ -9,7 +9,7 @@ const Portfolio = () => {
             
             <Stack spacing={4} direction='column'  align="center" mt={4} color={'white'}>
                 <Heading size={"3xl"}>Portfolio</Heading>
-                <Text fontSize={'xl'}>Here are some of the projects I have worked on.</Text>
+                <Text fontSize={'xl'} bg="purple.500/70" p={2}>Here are some of the projects I have worked on.</Text>
             </Stack>
 
             <Stack spacing={4} direction='row' wrap="wrap" justify="center" align="start" mt={4}> 
